@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    working-directory: ~/circleci-test
+    docker: 
+      - image: circleci/python:2-stretch
+    steps:
+      - checkout
+      - restore_cache:
+          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - run:
+          name: install requirements
+          command: |
+            virtualenv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - save_cache:
+          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - venv
+      - run:
+          name: Run script
+          command: |
+            . venv/bin/activate
+            python test.py
