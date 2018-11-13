@@ -6,8 +6,6 @@ jobs:
       - image: circleci/python:2-stretch
     steps:
       - checkout
-      - restore_cache:
-          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: install requirements
           command: |
@@ -18,6 +16,16 @@ jobs:
           key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
             - venv
+      - save_cache:
+          key: deps/-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - venv
+      - run: rm -rf venv
+      - restore_cache:
+          key: deps/-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - run: rm -rf venv
+      - restore_cache:
+          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: Run script
           command: |
