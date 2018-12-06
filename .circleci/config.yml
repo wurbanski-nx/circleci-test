@@ -5,29 +5,4 @@ jobs:
     docker: 
       - image: circleci/python:2-stretch
     steps:
-      - checkout
-      - run:
-          name: install requirements
-          command: |
-            virtualenv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-      - save_cache:
-          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
-          paths:
-            - venv
-      - save_cache:
-          key: deps/-{{ .Branch }}-{{ checksum "requirements.txt" }}
-          paths:
-            - venv
-      - run: rm -rf venv
-      - restore_cache:
-          key: deps/-{{ .Branch }}-{{ checksum "requirements.txt" }}
-      - run: rm -rf venv
-      - restore_cache:
-          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
-      - run:
-          name: Run script
-          command: |
-            . venv/bin/activate
-            python test.py
+      - run: env
