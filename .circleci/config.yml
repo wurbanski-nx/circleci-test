@@ -6,3 +6,8 @@ jobs:
       - image: circleci/python:2-stretch
     steps:
       - run: env
+
+workflows:
+  build_flow:
+    jobs:
+      - build
