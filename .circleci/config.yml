@@ -7,7 +7,7 @@ jobs:
       - setup_remote_docker
       - checkout
       - run: |
-          docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker build -t wurbanskinx/ci-test:test-1 .
           docker push wurbanskinx/ci-test:test-1
 
