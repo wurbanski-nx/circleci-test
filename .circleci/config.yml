@@ -8,12 +8,12 @@ jobs:
       - checkout
       - run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASS
-          docker build -t wurbanskinx/ci-test:test-1 .
-          docker push wurbanskinx/ci-test:test-1
+          docker build -t wurbanskinx/ci-test:test-${CIRCLE_SHA1} .
+          docker push wurbanskinx/ci-test:test-${CIRCLE_SHA1}
 
   run:
     docker:
-      - image: wurbanskinx/ci-test:test-1
+      - image: wurbanskinx/ci-test:test-${CIRCLE_SHA1}
     steps:
       - run: cat /test_file
 
