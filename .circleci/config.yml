@@ -1,16 +1,22 @@
 version: 2
 jobs:
   build:
-    working-directory: ~/circleci-test
-    #docker: 
-    #  - image: circleci/python:2-stretch
-    machine:
-      image: circleci/classic:201808-01
+    docker: 
+      - image: circleci/python:2-stretch
     steps:
-      - run: sudo apt install jq
-      - run: python -m pip install junit2html
-      - run: /opt/circleci/.pyenv/shims/junit2html
-      - run: curl -s https://circleci.com/api/v1.1/project/github/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BUILD_NUM} | jq -r '.workflows.workflow_name'
+      - setup_remote_docker
+      - checkout
+      - run: |
+          docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+          docker build -t wurbanskinx/ci-test:test-1 .
+          docker push wurbanskinx/ci-test:test-1
+
+  run:
+    docker:
+      - image: wurbanskinx/ci-test:test-1
+    steps:
+      - run: cat /test_file
+
 
 
 workflows:
@@ -18,3 +24,6 @@ workflows:
   build_flow:
     jobs:
       - build
+      - run:
+          requires:
+            - build
