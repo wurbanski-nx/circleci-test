@@ -25,6 +25,9 @@ workflows:
     jobs:
       - build:
           filters:
+            branches:
+              only:
+                - test
             tags:
               only: /^v.*/
       - run:
