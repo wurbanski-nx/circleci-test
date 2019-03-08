@@ -30,6 +30,10 @@ workflows:
                 - test
             tags:
               only: /^v.*/
+      - hold:
+          type: approval
+          requires:
+            - build
       - run:
           requires:
             - build
